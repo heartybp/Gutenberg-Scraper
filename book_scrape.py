@@ -35,14 +35,19 @@ class BookSearchApp:
         soup = BeautifulSoup(response.content, "html.parser")
 
         # find book titles and display them
-        book_titles = soup.find_all("span", class_="title")
+        book_titles = soup.select(".booklink .title")
         if book_titles:
-            messagebox.showinfo("Search Results", "\n".join(title.get_text() for title in book_titles))
+            results = [title.get_text().strip() for title in book_titles if title.get_text().strip()]
+            if results:
+                messagebox.showinfo("Search Results", "\n".join(results))
+            else:
+                messagebox.showinfo("No Results", "No books found for the search term.")
         else:
             messagebox.showinfo("No Results", "No books found for the search term.")
-
+    
 def main():
     root = tk.Tk()
+    root.geometry("400x300")
     app = BookSearchApp(root)
     root.mainloop()
 
